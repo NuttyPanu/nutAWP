@@ -20,7 +20,7 @@ class _AuthenState extends State<Authen> {
           gradient: RadialGradient(
             center: Alignment(0, -0.4),
             radius: 1.0,
-            colors: [Colors.white, Colors.lime],
+            colors: [Colors.white, Colors.blue],
           ),
         ),
         // decoration: BoxDecoration(color: Colors.lime),
@@ -54,7 +54,7 @@ class _AuthenState extends State<Authen> {
       },
       child: Text(
         'New Register',
-        style: TextStyle(color: Colors.pink),
+        style: TextStyle(color: Colors.black),
       ),
     );
   }
@@ -64,7 +64,7 @@ class _AuthenState extends State<Authen> {
       margin: EdgeInsets.only(top: 16),
       width: 250,
       child: RaisedButton(
-        color: Colors.purple.shade700,
+        color: Colors.blue.shade700,
         onPressed: () {},
         child: Text(
           'Login',
@@ -109,19 +109,19 @@ class _AuthenState extends State<Authen> {
   }
 
   Text buildText() => Text(
-        'Nutty PWA',
-        style: GoogleFonts.oxygen(
+        '- ฟิลแฟน -',
+        style: GoogleFonts.prompt(
             textStyle: TextStyle(
           fontSize: 30,
-          color: Colors.purple.shade700,
-          fontStyle: FontStyle.italic,
+          color: Colors.blue.shade700,
+          //fontStyle: FontStyle.italic,
           fontWeight: FontWeight.bold,
         )),
       );
 
   Container buildContainer() {
     return Container(
-      width: 180,
+      width: 150,
       child: Image.asset('images/logo.png'),
     );
   }

@@ -122,7 +122,7 @@ class _AuthenState extends State<Authen> {
   Container buildContainer() {
     return Container(
       width: 150,
-      child: Image.asset('images/logo.png'),
+      child: Image.asset('images/logo_.png'),
     );
   }
 }

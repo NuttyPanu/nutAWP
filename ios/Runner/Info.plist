@@ -41,5 +41,17 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Requires Access Your Location for register</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Requires Access Your Location for register</string>
+	<key>io.flutter.embedded_views_preview</key>
+    <true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Requires Camera for register</string>
+	<key>NSCameraUsageDescription</key>	
+	<string>Requires Camera for register</string>	
+	<key>NSMicrophoneUsageDescription</key>	
+	<string>Requires Camera for register</string>	
 </dict>
 </plist>

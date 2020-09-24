@@ -22,6 +22,16 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Req Acccess Cam For Register</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Req Acccess GPS Location For Register</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Req Acccess GPS Location For Register</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Req Acccess Cam For Register</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Req Acccess Cam For Register</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,17 +51,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Requires Access Your Location for register</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Requires Access Your Location for register</string>
 	<key>io.flutter.embedded_views_preview</key>
-    <true/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Requires Camera for register</string>
-	<key>NSCameraUsageDescription</key>	
-	<string>Requires Camera for register</string>	
-	<key>NSMicrophoneUsageDescription</key>	
-	<string>Requires Camera for register</string>	
+	<true/>
 </dict>
 </plist>

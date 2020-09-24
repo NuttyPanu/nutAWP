@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "739242641594",
+    "firebase_url": "https://nuttypwa-5086c.firebaseio.com",
+    "project_id": "nuttypwa-5086c",
+    "storage_bucket": "nuttypwa-5086c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:739242641594:android:5cd5c134c78736b7a41a83",
+        "android_client_info": {
+          "package_name": "com.pwa.nuttypwa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "739242641594-cpl2ojikufmomi8jgk3gl6ekpgvq1ejv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAQxyBF3vnAzV86NA5rk68p7lnUHZdhA0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "739242641594-cpl2ojikufmomi8jgk3gl6ekpgvq1ejv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

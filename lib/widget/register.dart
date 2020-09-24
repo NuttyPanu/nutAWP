@@ -1,7 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:nuttypwa/model/usermodel.dart';
+import 'package:nuttypwa/utility/normal_dialog.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
 
@@ -11,23 +17,23 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  //global variable
-  //array
-  List<String> positions = [
-    'gis',
-    'finance',
-    'hr',
-    'admin',
-    'manager',
-    'user',
-    'branch',
-    'other'
-  ];
+  //get border => null;
 
-  String choosePosition;
+  List<String> positions = [
+    'Account Manager',
+    'Administrative Officer',
+    'Brand Manager',
+    'Customer Service Executive',
+    'Financial Analyst',
+    'HR Generalist/ Specialist',
+    'Logistic Manager',
+    'GIS',
+    'Developer'
+  ];
+  String choosePosition, name, user, password, uid, urlPath;
   double lat, lng;
   File file;
-  // for init
+
   @override
   void initState() {
     // TODO: implement initState
@@ -40,17 +46,16 @@ class _RegisterState extends State<Register> {
     setState(() {
       lat = locationData.latitude;
       lng = locationData.longitude;
-      print('lat = $lat, lng = $lng');
+      print('lat = $lat,lng = $lng');
     });
   }
 
-  //method background
   Future<LocationData> findLocation() async {
     Location location = Location();
     try {
       return await location.getLocation();
     } catch (e) {
-      print('e findLocation ==> ${e.toString()}');
+      print('e Findlocation ==> ${e.toString()}');
       return null;
     }
   }
@@ -58,47 +63,43 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue.shade700,
-        title: Text('Register'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
+        appBar: AppBar(
+          actions: [
+            IconButton(
+                icon: Icon(Icons.cloud_upload), onPressed: () => uploadImage()),
+          ],
+          backgroundColor: Colors.purple.shade700,
+          title: Text('Register'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(children: [
             buildAvatar(),
             buildName(),
-            buildSizedBox(),
             buildSizedBox(),
             buildPosition(),
             buildSizedBox(),
             buildUser(),
             buildSizedBox(),
-            //SizedBox(
-            //  height: 16,
-            //);
             buildPassword(),
-            lat == null ? CircularProgressIndicator() : buildMap(),
             buildSizedBox(),
-          ],
-        ),
-      ),
-    );
+            lat == null ? CircularProgressIndicator() : buildContainerMAP(),
+          ]),
+        ));
   }
 
   Set<Marker> mySet() {
     return <Marker>[
       Marker(
-        markerId: MarkerId('myID'),
-        position: LatLng(lat, lng),
-        infoWindow: InfoWindow(
-          title: 'คุณอยู่ที่นี่',
-          snippet: 'lat = $lat, lng = $lng',
-        ),
-      ),
+          markerId: MarkerId('myID'),
+          position: LatLng(lat, lng),
+          infoWindow: InfoWindow(
+            title: 'คุณอยู่ที่นี่',
+            snippet: 'Lat : $lat, Long : $lng',
+          ))
     ].toSet();
   }
 
-  Container buildMap() {
+  Container buildContainerMAP() {
     CameraPosition cameraPosition = CameraPosition(
       target: LatLng(lat, lng),
       zoom: 16,
@@ -113,7 +114,6 @@ class _RegisterState extends State<Register> {
         onMapCreated: (controller) {},
         markers: mySet(),
       ),
-      // color: Colors.grey,
     );
   }
 
@@ -127,19 +127,13 @@ class _RegisterState extends State<Register> {
         width: 250,
         child: DropdownButton<String>(
           items: positions
-              .map(
-                (e) => DropdownMenuItem(
-                  child: Row(
-                    children: [
-                      Text(e),
-                    ],
-                  ),
-                  value: e,
-                ),
-              )
+              .map((e) => DropdownMenuItem(
+                    child: Text(e),
+                    value: e,
+                  ))
               .toList(),
           value: choosePosition,
-          hint: Text('Position Choose'),
+          hint: Text('Position'),
           onChanged: (value) {
             setState(() {
               choosePosition = value;
@@ -150,71 +144,63 @@ class _RegisterState extends State<Register> {
 
   Container buildName() {
     return Container(
-      width: 250,
-      child: TextField(
-        decoration: InputDecoration(
+        width: 250,
+        child: TextField(
+          onChanged: (value) => name = value.trim(),
+          decoration: InputDecoration(
             hintText: 'Display Name',
-            prefixIcon: Icon(
-              Icons.face,
-              //color: Color.fromRGBO(r, g, b, opacity),
-              color: Color(0xFFE81EE8),
-            ),
+            prefixIcon: Icon(Icons.face, color: Color(0xffe81ee8)),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25),
-              borderSide: BorderSide(color: Colors.black38),
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide(color: Colors.red),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(color: Colors.blue),
-            )),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 
   Container buildUser() {
     return Container(
-      width: 250,
-      child: TextField(
-        decoration: InputDecoration(
+        width: 250,
+        child: TextField(
+          keyboardType: TextInputType.emailAddress,
+          onChanged: (value) => user = value.trim(),
+          decoration: InputDecoration(
             hintText: 'User',
-            prefixIcon: Icon(
-              Icons.account_circle,
-              //color: Color.fromRGBO(r, g, b, opacity),
-              color: Color(0xFFE81EE8),
-            ),
+            prefixIcon: Icon(Icons.account_box, color: Color(0xffe81ee8)),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25),
-              borderSide: BorderSide(color: Colors.black38),
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide(color: Colors.red),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(color: Colors.blue),
-            )),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 
   Container buildPassword() {
     return Container(
-      width: 250,
-      child: TextField(
-        decoration: InputDecoration(
+        width: 250,
+        child: TextField(
+          onChanged: (value) => password = value.trim(),
+          decoration: InputDecoration(
             hintText: 'Password',
-            prefixIcon: Icon(
-              Icons.lock,
-              //color: Color.fromRGBO(r, g, b, opacity),
-              color: Color(0xFFE81EE8),
-            ),
+            prefixIcon: Icon(Icons.lock, color: Color(0xffe81ee8)),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25),
-              borderSide: BorderSide(color: Colors.black38),
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide(color: Colors.red),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(30),
               borderSide: BorderSide(color: Colors.blue),
-            )),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 
   Future<Null> chooseAvatar(ImageSource source) async {
@@ -233,11 +219,9 @@ class _RegisterState extends State<Register> {
 
   Container buildAvatar() {
     return Container(
-      margin: EdgeInsets.only(top: 0, bottom: 0),
+      margin: EdgeInsets.only(top: 16, bottom: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //mainAxisAlignment: MainAxisAlignment.spaceAround,
-        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
             icon: Icon(Icons.add_a_photo),
@@ -247,7 +231,7 @@ class _RegisterState extends State<Register> {
             width: 180,
             height: 180,
             child: file == null
-                ? Image.asset('images/avatar_.png')
+                ? Image.asset('images/avatar.png')
                 : Image.file(file),
           ),
           IconButton(
@@ -257,5 +241,64 @@ class _RegisterState extends State<Register> {
         ],
       ),
     );
+  }
+
+  Future<Null> uploadImage() async {
+    print('name= $name usere =$user password=$password');
+    if (file == null) {
+      normalDialog(context, 'Pls choose Avatar');
+    } else if (name == null ||
+        name.isEmpty ||
+        user == null ||
+        user.isEmpty ||
+        password == null ||
+        password.isEmpty) {
+      normalDialog(context, 'Pls กรอกข้อมูลให้ครบนะครับ ไม่เอาค่าว่าง');
+    } else if (choosePosition == null) {
+      normalDialog(context, 'Pls กรอกข้อมูลให้ครบนะครับ Position');
+    } else {
+      createAccount();
+    }
+  }
+
+  Future<Null> createAccount() async {
+    await Firebase.initializeApp().then((value) async {
+      print('Success Connect');
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: user, password: password)
+          .then((value) {
+        uid = value.user.uid;
+        print('Uid = $uid');
+        uploadImageThread();
+      }).catchError((value) {
+        String string = value.message;
+        normalDialog(context, string);
+      });
+    });
+  }
+
+  Future<Null> uploadImageThread() async {
+    String nameImage = '$uid.jpg';
+    StorageReference reference =
+        FirebaseStorage.instance.ref().child('AvatarNutty/$nameImage');
+    StorageUploadTask task = reference.putFile(file);
+    urlPath = await (await task.onComplete).ref.getDownloadURL();
+    print('Url Path=$urlPath');
+    inserDataToFirebase();
+  }
+
+  Future<Null> inserDataToFirebase() async {
+    UserModel model = UserModel(
+        name: name,
+        path: urlPath,
+        position: choosePosition,
+        lat: lat.toString(),
+        lng: lng.toString());
+    Map<String, dynamic> map = model.toJson();
+    await FirebaseFirestore.instance
+        .collection('UserNutty')
+        .doc(uid)
+        .set(map)
+        .then((value) => Navigator.pop(context));
   }
 }
